@@ -1,0 +1,47 @@
+dockerhubUsername: sufiyanbader
+
+userService:
+  replicaCount: 2
+  image:
+    tag: latest
+  port: 8001
+  env:
+    secretKey: supersecretkey123
+    algorithm: HS256
+    tokenExpire: "30"
+  database:
+    name: userdb
+    user: user
+    password: password
+
+productService:
+  replicaCount: 2
+  image:
+    tag: latest
+  port: 8002
+  database:
+    name: productdb
+    user: user
+    password: password
+
+orderService:
+  replicaCount: 2
+  image:
+    tag: latest
+  port: 8003
+  database:
+    name: orderdb
+    user: user
+    password: password
+
+notificationService:
+  replicaCount: 1
+  image:
+    tag: latest
+  port: 8004
+
+apiGateway:
+  replicaCount: 2
+  image:
+    tag: latest
+  port: 80

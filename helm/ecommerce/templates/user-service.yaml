@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: {{ .Values.userService.replicaCount }}
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: "{{ .Values.dockerhubUsername }}/user-service:{{ .Values.userService.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.userService.port }}
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://{{ .Values.userService.database.user }}:{{ .Values.userService.database.password }}@user-db:5432/{{ .Values.userService.database.name }}"
+            - name: SECRET_KEY
+              value: "{{ .Values.userService.env.secretKey }}"
+            - name: ALGORITHM
+              value: "{{ .Values.userService.env.algorithm }}"
+            - name: ACCESS_TOKEN_EXPIRE_MINUTES
+              value: "{{ .Values.userService.env.tokenExpire }}"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.userService.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - port: {{ .Values.userService.port }}
+      targetPort: {{ .Values.userService.port }}
+  type: ClusterIP
