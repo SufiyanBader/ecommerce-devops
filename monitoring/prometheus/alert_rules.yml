@@ -1,0 +1,29 @@
+groups:
+  - name: ecommerce_alerts
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "{{ $labels.job }} has been down for more than 1 minute"
+
+      - alert: HighResponseTime
+        expr: http_request_duration_seconds_p99 > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time on {{ $labels.job }}"
+          description: "{{ $labels.job }} p99 response time is above 2 seconds"
+
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate on {{ $labels.job }}"
+          description: "{{ $labels.job }} error rate is above 10%"
