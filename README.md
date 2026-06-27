@@ -175,6 +175,3 @@ This provisions on AWS:
 
 Grafana login: `admin` / `admin123`
 
-## Resume Summary
-
-> Designed and deployed a microservices e-commerce platform (5 services, FastAPI + Python) on Kubernetes using GitHub Actions CI/CD, Docker Hub registry, Helm charts, Terraform-provisioned AWS EKS infrastructure, and Prometheus/Grafana observability stack — reducing manual deployment steps to zero.
